@@ -1,0 +1,14 @@
+﻿{
+    "connectionString": "mongodb://127.0.0.1:27017/thp_dev",
+    "secret": "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING",
+    "emailFrom": "dan.roob90@ethereal.email",
+    "smtpOptions": {
+        "host": "smtp.ethereal.email",
+        "port": 587,
+        "auth": {
+            "user": "dan.roob90@ethereal.email",
+            "pass": "7sCv1BPAScf9CGkK36"
+        }
+    }
+}
+

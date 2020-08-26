@@ -96,7 +96,10 @@ async function register(params, origin) {
 
     // save account
     await account.save();
-
+    const user_profile = new db.User_Profile({
+        sender_id: account.id
+    });
+    await user_profile.save();
     // send email
     await sendVerificationEmail(account, origin);
 }

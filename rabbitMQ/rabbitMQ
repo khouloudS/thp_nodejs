@@ -1,0 +1,59 @@
+const express = require('express')
+const http = require('http')
+var basic = require('basic-authorization-header')
+var headers_basic_authorization = {
+    'Authorization': basic("khouloud", "khouloud"),
+};
+const rabbit_mq = function RabbitMQ(sender_id, method, hostname, port, path, body) {
+    const options = {
+        method: method,
+        hostname: hostname,
+        port: port,
+        path: path,
+        headers: headers_basic_authorization,
+        body: body,
+        json: true  // JSON stringifies the body automatically
+    }
+    const data = JSON.stringify(body)
+
+    const req = http.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+
+        res.on('data', d => {
+            process.stdout.write(d)
+        })
+    })
+
+    req.on('error', error => {
+        console.error(error)
+    })
+
+    req.write(data)
+    req.end()
+}
+
+/*const add_binding = function addBinding(sender_id){
+    const create_binding = {
+        method: 'POST',
+        hostname: 'localhost',
+        port: 15672,
+        path: '/api/bindings/%2f/e/thp_exchange/q/thp_queue_'+sender_id,
+        headers: headers_basic_authorization,
+        body: {"routing_key":"5fc7b95f5c749256c84b5b35", "arguments":{}},
+        json: true  // JSON stringifies the body automatically
+    }
+    const req_create_binding = http.request(create_binding, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+
+        res.on('data', d => {
+            process.stdout.write(d)
+        })
+    })
+    req_create_binding.on('error', error => {
+        console.error(error)
+    })
+    req_create_binding.end()*/
+
+
+module.exports = rabbit_mq;
+

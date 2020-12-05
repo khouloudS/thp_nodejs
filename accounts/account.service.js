@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const sendEmail = require('../_helpers/send-email');
 const db = require('../_helpers/db');
 const Role = require('../_helpers/role');
+const rabbit_mq = require('../rabbitMQ/rabbitMQ')
 
 module.exports = {
     authenticate,
@@ -101,6 +102,19 @@ async function register(params, origin) {
     });
     await user_profile.save();
 
+    //create queue for new user
+    const queue_body = {
+        'auto_delete': false,
+        'durable': true,
+        'arguments': {}
+    }
+    rabbit_mq(account.id,
+        "PUT",
+        "localhost",
+        15672,
+        "/api/queues/%2f/"+account.id,
+         queue_body)
+
     // send email
     await sendVerificationEmail(account, origin);
 }
@@ -112,6 +126,19 @@ async function verifyEmail({ token }) {
 
     account.verified = Date.now();
     account.verificationToken = undefined;
+    //create a new binding
+    const binding_body = {
+        // send body data here
+        "routing_key": account.id,
+        "arguments": {}
+
+    };
+    rabbit_mq(account.id,
+        "POST",
+        "localhost",
+        15672,
+        "/api/bindings/%2f/e/thp_exchange/q/"+account.id,
+        binding_body)
     await account.save();
 }
 

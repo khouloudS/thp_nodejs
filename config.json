@@ -1,13 +1,13 @@
 ﻿{
     "connectionString": "mongodb://127.0.0.1:27017/thp_dev",
     "secret": "secret",
-    "emailFrom": "dan.roob90@ethereal.email",
+    "emailFrom": "khouloud.sellami@thp.social",
     "smtpOptions": {
-        "host": "smtp.ethereal.email",
+        "host": "in-v3.mailjet.com",
         "port": 587,
         "auth": {
-            "user": "dan.roob90@ethereal.email",
-            "pass": "7sCv1BPAScf9CGkK36"
+            "user": "",
+            "pass": ""
         }
     }
 }
